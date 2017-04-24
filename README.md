@@ -1,0 +1,1 @@
+# Lokaverkefni-GSO_2.onn
