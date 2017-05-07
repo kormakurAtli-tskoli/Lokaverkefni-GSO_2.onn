@@ -118,16 +118,65 @@ LIMIT 5;
 
 -- Eftirfarandi eru fyrirspurnir frá okkur
 
--- 1) 
+-- 1) Fjöldi laga á hverjum diski
+SELECT diskur.nafn as "Diskur", count(lag.nafn) as "Fjöldi laga"
+FROM diskur
+JOIN lag
+ON lag.diskur = diskur.ID
+GROUP BY diskur.nafn;
 
--- 2) 
+-- 2) Flytjendur og í hvaða flokk þeir eru
+SELECT flytjandi.nafn as "Flytjandi", flokkur.nafn as "Flokkur"
+FROM flytjandi
+JOIN flokkur
+ON flytjandi.flokkur_flytjanda = flokkur.ID;
 
--- 3) 
+-- 3) Öll lög sem eru af tegundinni "Folk Rock"
+SELECT lag.nafn as "Lag", tegund.nafn as "Tegund"
+FROM lag
+JOIN tegund
+ON tegund.ID = lag.tegund
+WHERE tegund.nafn = "Folk Rock";
 
--- 4) 
+-- 4) Allir diskar og flytjendur þeirra sem voru gefnir út af "Columbia Records"
+SELECT utgefandi.nafn AS  "Útgefandi", diskur.nafn AS  "Diskur", flytjandi.nafn AS  "Flytjandi"
+FROM utgefandi
+JOIN diskur
+ON utgefandi.ID = diskur.utgefandi
+JOIN lag
+ON lag.diskur = diskur.ID
+JOIN flytjandi
+ON flytjandi.ID = lag.flytjandi
+WHERE utgefandi.nafn =  "Columbia Records"
+GROUP BY diskur.nafn
+ORDER BY flytjandi.nafn;
 
--- 5) 
+-- 5) Hvaða flokkur hver diskur er
+SELECT diskur.nafn as "Diskur", flokkur.nafn as "Flokkur"
+FROM diskur
+JOIN lag
+ON lag.diskur = diskur.ID 
+JOIN flytjandi
+ON flytjandi.ID = lag.flytjandi
+JOIN flokkur
+ON flokkur.ID = flytjandi.flokkur_flytjanda
+GROUP BY diskur.nafn;
 
--- 6) 
+-- 6) Hvaða diskar eru sólóplötir
+SELECT diskur.nafn AS  "Diskur", flokkur.nafn AS  "Flokkur"
+FROM diskur
+JOIN lag 
+ON lag.diskur = diskur.ID
+JOIN flytjandi 
+ON flytjandi.ID = lag.flytjandi
+JOIN flokkur 
+ON flokkur.ID = flytjandi.flokkur_flytjanda
+GROUP BY diskur.nafn
+HAVING flokkur.nafn =  "Sóló";
 
--- 7) 
+-- 7) Sýndu textann fyrir öll Aerosmith lögin
+SELECT lag.nafn as "Lag", lag.texti as "Texti", flytjandi.nafn as "Flytjandi"
+FROM lag
+JOIN flytjandi
+ON flytjandi.ID = lag.flytjandi
+WHERE flytjandi.nafn = "Aerosmith";
